@@ -107,7 +107,13 @@ app.post('/api/replies/:board', async (req, res) => {
 });
 
 app.get('/api/threads/:board', async (req, res) => {
-  let threads = await Thread.find({}).sort({ bumped_on: -1 }).limit(10);
+
+  const board = await Board.find({ name: req.params.board });
+  if(!board){
+    return res.status(404).send(`The board '${ req.params.board }' doesn't exist.`);
+  }
+
+  let threads = await Thread.find({ boardName: req.params.board }).sort({ bumped_on: -1 }).limit(10);
 
   threads = threads.map(thread => {
     let replies = thread.replies;
@@ -120,6 +126,32 @@ app.get('/api/threads/:board', async (req, res) => {
   });
 
   return res.send(threads);
+});
+
+app.get('/api/replies/:board', async (req, res) => {
+  const board = await Board.find({ name: req.params.board });
+  if(!board){
+    return res.status(404).send(`The board '${ req.params.board }' doesn't exist.`);
+  }
+
+  const threadId = req.query['thread_id'];
+
+  if(!threadId){
+    return res.status(404).send('You must provide a thread_id query parameter.');
+  }
+
+  let thread = await Thread.findById(threadId);
+  if(thread.boardName !== board.name){
+    return res.status(400).send(`The provided thread does not belong to the ${board.name} board.`);
+  }
+
+  let replies = thread.replies;
+  replies = _.reverse(replies);
+  replies = replies.map(reply => _.pick(reply, ['text', 'created_on']));
+  let newThread = _.pick(thread, ['boardName', 'text', 'created_on', 'bumped_on', 'replies']);
+  newThread.replies = replies;
+
+  return res.send(newThread);
 });
 
 app.listen(port, () => {
