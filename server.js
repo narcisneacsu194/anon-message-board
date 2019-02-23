@@ -97,10 +97,29 @@ app.post('/api/replies/:board', async (req, res) => {
   thread.replies.push(reply);
   
   let dbThread = await thread.save();
-  
+  let replies = dbThread.replies;
+  replies = replies.map(reply => _.pick(reply, ['text', 'created_on']));
+
   dbThread = _.pick(dbThread, ['boardName', 'text', 'created_on', 'bumped_on', 'replies']);
+  dbThread.replies = replies;
 
   return res.send(dbThread);
+});
+
+app.get('/api/threads/:board', async (req, res) => {
+  let threads = await Thread.find({}).sort({ bumped_on: -1 }).limit(10);
+
+  threads = threads.map(thread => {
+    let replies = thread.replies;
+    replies = _.takeRight(replies, 3);
+    replies = _.reverse(replies);
+    replies = replies.map(reply => _.pick(reply, ['text', 'created_on']));
+    let newThread = _.pick(thread, ['boardName', 'text', 'created_on', 'bumped_on', 'replies']);
+    newThread.replies = replies;
+    return newThread;
+  });
+
+  return res.send(threads);
 });
 
 app.listen(port, () => {
