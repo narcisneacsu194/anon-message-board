@@ -108,8 +108,8 @@ app.post('/api/replies/:board', async (req, res) => {
 
 app.get('/api/threads/:board', async (req, res) => {
 
-  const board = await Board.find({ name: req.params.board });
-  if(!board){
+  const boards = await Board.find({ name: req.params.board });
+  if(!boards[0]){
     return res.status(404).send(`The board '${ req.params.board }' doesn't exist.`);
   }
 
@@ -129,8 +129,8 @@ app.get('/api/threads/:board', async (req, res) => {
 });
 
 app.get('/api/replies/:board', async (req, res) => {
-  const board = await Board.find({ name: req.params.board });
-  if(!board){
+  const boards = await Board.find({ name: req.params.board });
+  if(!boards[0]){
     return res.status(404).send(`The board '${ req.params.board }' doesn't exist.`);
   }
 
@@ -141,8 +141,8 @@ app.get('/api/replies/:board', async (req, res) => {
   }
 
   let thread = await Thread.findById(threadId);
-  if(thread.boardName !== board.name){
-    return res.status(400).send(`The provided thread does not belong to the ${board.name} board.`);
+  if(thread.boardName !== boards[0].name){
+    return res.status(400).send(`The provided thread does not belong to the ${boards[0].name} board.`);
   }
 
   let replies = thread.replies;
