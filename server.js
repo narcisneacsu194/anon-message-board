@@ -243,6 +243,63 @@ app.delete('/api/replies/:board', async (req, res) => {
   });
 });
 
+app.put('/api/threads/:board', async (req, res) => {
+  const board = await Board.findOne({ name: req.params.board });
+  const { thread_id } = req.body;
+
+  if(!board){
+    return res.status(404).send(`The board '${ req.params.board }' doesn't exist.`);
+  }
+
+  if(!thread_id || thread_id.trim() === ''){
+    return res.status(400).send('The thread_id field is mandatory and it can\'t be an empty string.');
+  }
+
+  const thread = await Thread.findById(thread_id);
+
+  if(!thread){
+    return res.status(400).send(`A thread with an id of "${thread_id}" doesn't exist.`);
+  }
+
+  thread.reported = true;
+  await thread.save();
+  return res.send('success');
+});
+
+app.put('/api/replies/:board', async (req, res) => {
+  const board = await Board.findOne({ name: req.params.board });
+  const { thread_id, reply_id } = req.body;
+
+  if(!board){
+    return res.status(404).send(`The board '${ req.params.board }' doesn't exist.`);
+  }
+
+  if(!thread_id || thread_id.trim() === ''){
+    return res.status(400).send('The thread_id field is mandatory and it can\'t be an empty string.');
+  }
+
+  if(!reply_id || reply_id.trim() === ''){
+    return res.status(400).send('The reply_id field is mandatory and it can\'t be an empty string.');
+  }
+
+  const thread = await Thread.findById(thread_id);
+
+  if(!thread){
+    return res.status(400).send(`A thread with an id of "${thread_id}" doesn't exist.`);
+  }
+
+  thread.replies = thread.replies.map((reply) => {
+    if(reply._id.toHexString() === reply_id){
+      reply.reported = true;
+    }
+
+    return reply;
+  });
+  
+  await thread.save();
+  return res.send('success');
+});
+
 app.listen(port, () => {
   console.log(`Server started up on port ${port}`);
 });
