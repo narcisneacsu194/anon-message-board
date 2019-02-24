@@ -154,8 +154,97 @@ app.get('/api/replies/:board', async (req, res) => {
   return res.send(newThread);
 });
 
+app.delete('/api/threads/:board', async (req, res) => {
+  const board = await Board.findOne({ name: req.params.board });
+  const { thread_id, delete_password } = req.body;
+
+  if(!board){
+    return res.status(404).send(`The board '${ req.params.board }' doesn't exist.`);
+  }
+
+  if(!delete_password || delete_password.trim() === ''){
+    return res.status(400).send('The password of the reply is mandatory and it can\'t be an empty string.');
+  }
+
+  if(!thread_id || thread_id.trim() === ''){
+    return res.status(400).send('The thread_id field is mandatory and it can\'t be an empty string.');
+  }
+
+  const thread = await Thread.findById(thread_id);
+
+  if(!thread){
+    return res.status(400).send(`A thread with an id of "${thread_id}" doesn't exist.`);
+  }
+
+  if(thread.boardName !== board.name){
+    return res.status(400).send(`The given thread does not belong to the ${boardName} board.`);
+  }
+
+  return bcrypt.compare(delete_password, thread['delete_password'], async (err, compareRes) => {
+    if(compareRes){
+      await thread.delete();
+      return res.send('success');
+    }
+
+    return res.send('incorrect password');
+  });
+});
+
+app.delete('/api/replies/:board', async (req, res) => {
+  const board = await Board.findOne({ name: req.params.board });
+  const { thread_id, reply_id, delete_password } = req.body;
+
+  if(!board){
+    return res.status(404).send(`The board '${ req.params.board }' doesn't exist.`);
+  }
+
+  if(!delete_password || delete_password.trim() === ''){
+    return res.status(400).send('The password of the reply is mandatory and it can\'t be an empty string.');
+  }
+
+  if(!thread_id || thread_id.trim() === ''){
+    return res.status(400).send('The thread_id field is mandatory and it can\'t be an empty string.');
+  }
+
+  if(!reply_id || reply_id.trim() === ''){
+    return res.status(400).send('The reply_id field is mandatory and it can\'t be an empty string.');
+  }
+
+  const thread = await Thread.findById(thread_id);
+
+  if(!thread){
+    return res.status(400).send(`A thread with an id of "${thread_id}" doesn't exist.`);
+  }
+
+  if(thread.boardName !== board.name){
+    return res.status(400).send(`The given thread does not belong to the ${boardName} board.`);
+  }
+
+  const replies = thread.replies;
+  const filteredReplies = replies.filter(reply => reply._id.toHexString() === reply_id);
+  const replyToBeDeleted = filteredReplies[0];
+  
+  return bcrypt.compare(delete_password, replyToBeDeleted['delete_password'], async (err, compareRes) => {
+    if(compareRes){
+      const finalReplies = replies.map((reply) => {
+        if(reply._id.toHexString() === reply_id){
+          reply.text = '[deleted]';
+        }
+
+        return reply;
+      });
+      
+      thread.replies = finalReplies;
+      await thread.save();
+      return res.send('success');
+    }
+
+    return res.send('incorrect password');
+  });
+});
+
 app.listen(port, () => {
-    console.log(`Server started up on port ${port}`);
+  console.log(`Server started up on port ${port}`);
 });
   
 module.exports = { app };
