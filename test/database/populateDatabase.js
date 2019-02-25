@@ -17,6 +17,7 @@ const threads = [
     created_on: date,
     bumped_on: date,
     delete_password: 'password2',
+    boardName: 'board1',
     replies: [
         {
             text: 'reply1',
@@ -36,6 +37,7 @@ const threads = [
     created_on: date,
     bumped_on: date,
     delete_password: 'password2',
+    boardName: 'board1',
     replies: [
         {
             text: 'reply3',
@@ -64,5 +66,5 @@ const populateThreadCollection = (done) => {
 };
 
 module.exports = {
-  populateBookCollection, populateCommentCollection, boards, threads
+  populateBoardCollection, populateThreadCollection, boards, threads
 };
