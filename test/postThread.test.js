@@ -22,14 +22,14 @@ describe('POST /api/threads/:board', () => {
      .send(body)
      .expect(200)
      .expect((res) => {
-       const body = res.body;
-       const createdOn = moment(body['created_on']).format('ddd MMM DD YYYY hh:mm');
-       const bumpedOn = moment(body['bumped_on']).format('ddd MMM DD YYYY hh:mm');
-       expect(body.boardName).toBe('board1');
-       expect(body.text).toBe('The Thread');
+       const resBody = res.body;
+       const createdOn = moment(resBody['created_on']).format('ddd MMM DD YYYY hh:mm');
+       const bumpedOn = moment(resBody['bumped_on']).format('ddd MMM DD YYYY hh:mm');
+       expect(resBody.boardName).toBe('board1');
+       expect(resBody.text).toBe('The Thread');
        expect(createdOn).toBe(timestamp);
        expect(bumpedOn).toBe(timestamp);
-       expect(body.replies.length).toBe(0);
+       expect(resBody.replies.length).toBe(0);
      }).end((err) => {
         if(err){
           return done(err);

@@ -7,6 +7,10 @@ const boards = [
   {
     _id: new ObjectID(),
     name: 'board1'
+  },
+  {
+    _id: new ObjectID(),
+    name: 'board2'
   }
 ];
 
