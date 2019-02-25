@@ -24,11 +24,13 @@ const threads = [
     boardName: 'board1',
     replies: [
         {
+            _id: new ObjectID(),
             text: 'reply1',
             created_on: date,
             delete_password: 'password3'
         },
         {
+            _id: new ObjectID(),
             text: 'reply2',
             created_on: date,
             delete_password: 'password3'
@@ -44,11 +46,13 @@ const threads = [
     boardName: 'board1',
     replies: [
         {
+            _id: new ObjectID(),
             text: 'reply3',
             created_on: date,
             delete_password: 'password3'
         },
         {
+            _id: new ObjectID(),
             text: 'reply4',
             created_on: date,
             delete_password: 'password3'

@@ -1,6 +1,5 @@
 const expect = require('expect');
 const request = require('supertest');
-const moment = require('moment-timezone');
 const { ObjectID } = require('mongodb');
 const { app } = require('../server');
 const { Thread } = require('../models/Thread');
@@ -10,7 +9,7 @@ beforeEach(populateBoardCollection);
 beforeEach(populateThreadCollection);
 
 describe('PUT /api/threads/:board', () => {
-  it('should successfully turn the "reported" property from the thread to "true"', (done) => {
+  it('should successfully turn the "reported" property from a specific thread to "true"', (done) => {
     const threadId = threads[0]._id.toHexString();
     const body = { thread_id: threadId };
 
