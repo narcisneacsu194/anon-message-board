@@ -57,24 +57,24 @@ describe('POST /api/threads/:board', () => {
         delete_password: 'password2'
     };
     request(app)
-      .post('/api/threads/board2')
+      .post('/api/threads/board3')
       .send(body)
       .expect(200)
       .expect((res) => {
-        expect(res.body.boardName).toBe('board2');
+        expect(res.body.boardName).toBe('board3');
       })
       .end((err) => {
         if(err){
           return done(err);
         }
 
-        return Board.findOne({ name: 'board2' }).then((board) => {
+        return Board.findOne({ name: 'board3' }).then((board) => {
           expect(board).toBeTruthy();
-          expect(board.name).toBe('board2');
+          expect(board.name).toBe('board3');
          
           return Thread.findOne({ text: 'The Thread' });
         }).then((thread) => {
-          expect(thread.boardName).toBe('board2');
+          expect(thread.boardName).toBe('board3');
           done();
         }).catch(error => done(error));
       });
