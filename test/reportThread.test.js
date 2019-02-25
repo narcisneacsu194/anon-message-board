@@ -10,6 +10,7 @@ beforeEach(populateThreadCollection);
 
 describe('PUT /api/threads/:board', () => {
   it('should successfully turn the "reported" property from a specific thread to "true"', (done) => {
+    /* eslint no-underscore-dangle: 0 */
     const threadId = threads[0]._id.toHexString();
     const body = { thread_id: threadId };
 
@@ -21,11 +22,11 @@ describe('PUT /api/threads/:board', () => {
         expect(res.text).toBe('success');
       })
       .end((err) => {
-        if(err){
+        if (err) {
           return done(err);
         }
 
-        Thread.findById(threadId).then((thread) => {
+        return Thread.findById(threadId).then((thread) => {
           expect(thread.reported).toBe(true);
           done();
         }).catch(error => done(error));
@@ -43,11 +44,11 @@ describe('PUT /api/threads/:board', () => {
         expect(res.text).toBe('The board "board3" doesn\'t exist.');
       })
       .end((err) => {
-        if(err){
+        if (err) {
           return done(err);
         }
 
-        Thread.findById(body['thread_id']).then((thread) => {
+        return Thread.findById(body.thread_id).then((thread) => {
           expect(thread.reported).toBe(false);
           done();
         }).catch(error => done(error));
@@ -85,7 +86,7 @@ describe('PUT /api/threads/:board', () => {
       .send(body)
       .expect(400)
       .expect((res) => {
-        expect(res.text).toBe(`A thread with an id of "${body['thread_id']}" doesn't exist.`);
+        expect(res.text).toBe(`A thread with an id of "${body.thread_id}" doesn't exist.`);
       })
       .end(done);
   });
@@ -100,11 +101,11 @@ describe('PUT /api/threads/:board', () => {
         expect(res.text).toBe('The given thread does not belong to the "board2" board.');
       })
       .end((err) => {
-        if(err){
+        if (err) {
           return done(err);
         }
 
-        Thread.findById(body['thread_id']).then((thread) => {
+        return Thread.findById(body.thread_id).then((thread) => {
           expect(thread.reported).toBe(false);
           done();
         }).catch(error => done(error));

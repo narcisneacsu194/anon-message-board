@@ -15,10 +15,10 @@ describe('GET /api/threads/:board', () => {
       .expect(200)
       .expect((res) => {
         const timestamp = moment(Date.now()).format('ddd MMM DD YYYY hh:mm');
-        const body = res.body;
+        const { body } = res;
         body.forEach((thread, index) => {
-          const createdOn = moment(thread['created_on']).format('ddd MMM DD YYYY hh:mm');
-          const bumpedOn = moment(thread['bumped_on']).format('ddd MMM DD YYYY hh:mm');
+          const createdOn = moment(thread.created_on).format('ddd MMM DD YYYY hh:mm');
+          const bumpedOn = moment(thread.bumped_on).format('ddd MMM DD YYYY hh:mm');
 
           expect(thread.boardName).toBe('board1');
           expect(thread.text).toBe(threads[index].text);
@@ -29,16 +29,17 @@ describe('GET /api/threads/:board', () => {
 
           newReplies.forEach((reply, replyIndex) => {
             const localReply = threads[index].replies[replyIndex];
-            const localReplyCreatedOn = moment(localReply['created_on'])
+            const localReplyCreatedOn = moment(localReply.created_on)
               .format('ddd MMM DD YYYY hh:mm');
-            const reqReplyCreatedOn = moment(reply['created_on'])
+            const reqReplyCreatedOn = moment(reply.created_on)
               .format('ddd MMM DD YYYY hh:mm');
 
             expect(reply.text).toBe(localReply.text);
             expect(reqReplyCreatedOn).toBe(localReplyCreatedOn);
           });
         });
-      }).end(done);
+      })
+      .end(done);
   });
 
   it('should return an error if the provided board doesn\'t exist.', (done) => {
@@ -46,7 +47,7 @@ describe('GET /api/threads/:board', () => {
       .get('/api/threads/board3')
       .expect(404)
       .expect((res) => {
-        expect(res.text).toBe(`The board 'board3' doesn't exist.`);
+        expect(res.text).toBe('The board \'board3\' doesn\'t exist.');
       })
       .end(done);
   });

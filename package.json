@@ -19,6 +19,9 @@
     "mongoose": "^5.3.13"
   },
   "devDependencies": {
+    "eslint": "^5.14.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
     "expect": "^21.1.0",
     "mocha": "^3.0.2",
     "nyc": "^13.1.0",
