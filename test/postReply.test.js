@@ -151,4 +151,20 @@ describe('POST /api/replies/:board', () => {
       })
       .end(done);
   });
+
+  it('should return an error if trying to create a reply using an empty string for the "delete_password" property', (done) => {
+    const body = {
+      text: 'Reply 100',
+      delete_password: '',
+      thread_id: threads[0]._id.toHexString(),
+    };
+    request(app)
+      .post('/api/replies/board1')
+      .send(body)
+      .expect(400)
+      .expect((res) => {
+        expect(res.text).toBe('The password property is mandatory and it can\'t be an empty string.');
+      })
+      .end(done);
+  });
 });

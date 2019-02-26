@@ -135,16 +135,7 @@ describe('PUT /api/replies/:board', () => {
       .expect((res) => {
         expect(res.text).toBe('The "reply_id" field is mandatory and it can\'t be an empty string.');
       })
-      .end((err) => {
-        if (err) {
-          return done(err);
-        }
-
-        return Thread.findById(body.thread_id).then((thread) => {
-          expect(thread.replies[0].reported).toBe(false);
-          done();
-        }).catch(error => done(error));
-      });
+      .end(done);
   });
 
   it('should return an error if trying to report a specific reply while providing an invalid value for the "reply_id" property', (done) => {
@@ -158,15 +149,21 @@ describe('PUT /api/replies/:board', () => {
       .expect((res) => {
         expect(res.text).toBe('The provided reply id is invalid.');
       })
-      .end((err) => {
-        if (err) {
-          return done(err);
-        }
+      .end(done);
+  });
 
-        return Thread.findById(body.thread_id).then((thread) => {
-          expect(thread.replies[0].reported).toBe(false);
-          done();
-        }).catch(error => done(error));
-      });
+  it('should return an error if trying to report a specific reply while providing a "reply_id" that doesn\'t belong to any reply', (done) => {
+    const threadId = threads[0]._id.toHexString();
+    const replyId = new ObjectID().toHexString();
+    const body = { thread_id: threadId, reply_id: replyId }; 
+
+    request(app)
+      .put('/api/replies/board1')
+      .send(body)
+      .expect(400)
+      .expect((res) => {
+        expect(res.text).toBe(`A reply with an id of "${replyId}" doesn\'t exist.`);
+      })
+      .end(done);
   });
 });

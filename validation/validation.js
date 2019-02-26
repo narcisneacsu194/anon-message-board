@@ -39,6 +39,12 @@ const validateInput = async (action, entityType, input, res) => {
     if (!ObjectID.isValid(input.reply_id)) {
       return res.status(400).send('The provided reply id is invalid.');
     }
+
+    const returnedReply = thread.replies.filter(arrReply => arrReply._id.toHexString() === input.reply_id);
+
+    if(returnedReply.length !== 1){
+      return res.status(400).send(`A reply with an id of "${input.reply_id}" doesn't exist.`);
+    }
   }
 
   if (action === 'post') {
@@ -47,7 +53,7 @@ const validateInput = async (action, entityType, input, res) => {
     }
   }
 
-  if (action === 'delete') {
+  if (action === 'delete' || action === 'post') {
     if (!input.delete_password || input.delete_password.trim() === '') {
       return res.status(400).send('The password property is mandatory and it can\'t be an empty string.');
     }

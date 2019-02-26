@@ -48,7 +48,7 @@ app.post('/api/threads/:board', async (req, res) => {
 
   let dbThread = await thread.save();
 
-  dbThread = _.pick(dbThread, ['boardName', 'text', 'created_on', 'bumped_on', 'replies']);
+  dbThread = _.pick(dbThread, ['_id', 'boardName', 'text', 'created_on', 'bumped_on', 'replies']);
 
   return res.send(dbThread);
 });
@@ -85,9 +85,9 @@ app.post('/api/replies/:board', async (req, res) => {
 
   let dbThread = await result.save();
   let { replies } = dbThread;
-  replies = replies.map(currentReply => _.pick(currentReply, ['text', 'created_on']));
+  replies = replies.map(currentReply => _.pick(currentReply, ['_id', 'text', 'created_on']));
 
-  dbThread = _.pick(dbThread, ['boardName', 'text', 'created_on', 'bumped_on', 'replies']);
+  dbThread = _.pick(dbThread, ['_id', 'boardName', 'text', 'created_on', 'bumped_on', 'replies']);
   dbThread.replies = replies;
 
   return res.send(dbThread);
@@ -105,8 +105,8 @@ app.get('/api/threads/:board', async (req, res) => {
     let { replies } = thread;
     replies = _.takeRight(replies, 3);
     replies = _.reverse(replies);
-    replies = replies.map(reply => _.pick(reply, ['text', 'created_on']));
-    const newThread = _.pick(thread, ['boardName', 'text', 'created_on', 'bumped_on', 'replies']);
+    replies = replies.map(reply => _.pick(reply, ['_id', 'text', 'created_on']));
+    const newThread = _.pick(thread, ['_id', 'boardName', 'text', 'created_on', 'bumped_on', 'replies']);
     newThread.replies = replies;
     return newThread;
   });
@@ -126,8 +126,8 @@ app.get('/api/replies/:board', async (req, res) => {
 
   let { replies } = result;
   replies = _.reverse(replies);
-  replies = replies.map(reply => _.pick(reply, ['text', 'created_on']));
-  const responseThread = _.pick(result, ['boardName', 'text', 'created_on', 'bumped_on', 'replies']);
+  replies = replies.map(reply => _.pick(reply, ['_id', 'text', 'created_on']));
+  const responseThread = _.pick(result, ['_id', 'boardName', 'text', 'created_on', 'bumped_on', 'replies']);
   responseThread.replies = replies;
 
   return res.send(responseThread);
