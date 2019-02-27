@@ -37,9 +37,9 @@ a well-known social-media used by millions of users.
 
   ### Error Cases
 
-  If the *text* property is not provided in the request body, or an empty string is used as its value, then the **The text of the thread is mandatory and it can\'t be an an empty string.** message will be returned to the user.
+   - If the *text* property is not provided in the request body, or an empty string is used as its value, then the **The text of the thread is mandatory and it can\'t be an an empty string.** message will be returned to the user.
 
-  If the *delete_password* property is not provided in the request body, or an empty string is used as its value, then the **The password of the thread is mandatory and it can\'t be an empty string.** message will be returned to the user.
+   - If the *delete_password* property is not provided in the request body, or an empty string is used as its value, then the **The password of the thread is mandatory and it can\'t be an empty string.** message will be returned to the user.
 
 
 * *POST /api/replies/:board* will create a new reply for a specific thread, which is included in one of the existing boards. The name of the board is specified as a request parameter. The following is an example of a request body that is needed to successfully make the call to the endpoint:
