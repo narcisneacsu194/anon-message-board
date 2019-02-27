@@ -4,7 +4,7 @@ Microservice project for recording thread style messages, which are included in 
 The threads also contain replies. This system is very similar with how Reddit is built. Reddit is
 a well-known social-media used by millions of users.
 
-**Examples:**
+### Examples:
 
 * *POST /api/threads/:board* will create a new thread for the specified board. If the provided board doesn't exist, it will be created and saved in the database. The following is an example of a request body that is needed to successfully make the call to the endpoint:
 
@@ -35,9 +35,9 @@ a well-known social-media used by millions of users.
   property will be updated anytime a new reply is added to the thread.
   Also, an empty array of replies is returned. It can be populated using the next endpoint that is discussed.
 
-  ### Error Cases
+  ###### Error Cases
 
-   - If the *text* property is not provided in the request body, or an empty string is used as its value, then the **The text of the thread is mandatory and it can\'t be an an empty string.** message will be returned to the user.
+   - If the *text* property is not provided in the request body, or an empty string is used as its value, then the message **"The text of the thread is mandatory and it can\'t be an an empty string."** will be returned to the user.
 
    - If the *delete_password* property is not provided in the request body, or an empty string is used as its value, then the **The password of the thread is mandatory and it can\'t be an empty string.** message will be returned to the user.
 
@@ -74,21 +74,21 @@ a well-known social-media used by millions of users.
    ```
   The first four properties are the same as the ones showed in the previous section. The only difference here is that we added a new reply to the existent thread. The properties *text* and *created_on* are shown for each reply.
 
-  ### Error Cases
+  ###### Error Cases
 
-  If the provided *board* request parameter isn't a name for any existent board from the database, then the **The board "board500" doesn't exist.** message will be returned to the user. We assume that the user provided the name "board500" for the board as a request parameter, and that board doesn't exist in the database.
+   - If the provided *board* request parameter isn't a name for any existent board from the database, then the **The board "board500" doesn't exist.** message will be returned to the user. We assume that the user provided the name "board500" for the board as a request parameter, and that board doesn't exist in the database.
 
-  If the *thread_id* property is not provided in the request body, or an empty string is used as its value, then the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
+   - If the *thread_id* property is not provided in the request body, or an empty string is used as its value, then the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
 
-  Here is an example of how the value of the *thread_id* property should look like: "5c752dfc7f1c1c20e7b55811". If the user doesn't provide a value similar to that (for example, the user provides the value "123" for the *thread_id*), then the **The provided thread id is invalid.** message will be returned to the user.
+   - Here is an example of how the value of the *thread_id* property should look like: "5c752dfc7f1c1c20e7b55811". If the user doesn't provide a value similar to that (for example, the user provides the value "123" for the *thread_id*), then the **The provided thread id is invalid.** message will be returned to the user.
 
-  Another error case would be if the user provides a *thread_id* that doesn't belong to any thread in the database. In this case, the following message will be returned to the user: **A thread with an id of "5c752dfc7f1c1c20e7b55811" doesn't exist.**. We assume that the id included between the quotation marks doesn't really belong to a thread from the database.
+   - Another error case would be if the user provides a *thread_id* that doesn't belong to any thread in the database. In this case, the following message will be returned to the user: **A thread with an id of "5c752dfc7f1c1c20e7b55811" doesn't exist.**. We assume that the id included between the quotation marks doesn't really belong to a thread from the database.
 
-  After going through all the *thread_id* validations, and actually finding an existing thread in the database, we compare the *boardName* property of the thread with the board name provided by the user. If they do not match, the message **The given thread does not belong to the "board10" board.** will be returned to the user, assuming that the name "board10" is what the user provided when running the request.
+   - After going through all the *thread_id* validations, and actually finding an existing thread in the database, we compare the *boardName* property of the thread with the board name provided by the user. If they do not match, the message **The given thread does not belong to the "board10" board.** will be returned to the user, assuming that the name "board10" is what the user provided when running the request.
 
-  If the *text* property is not provided in the request body, or an empty string is used as its value, then the **The text of the reply is mandatory and it can\'t be an empty string.** message will be returned to the user.
+   - If the *text* property is not provided in the request body, or an empty string is used as its value, then the **The text of the reply is mandatory and it can\'t be an empty string.** message will be returned to the user.
 
-  If the *delete_password* property is not provided in the request body, or an empty string is used as its value, then the **The password of the thread is mandatory and it can\'t be an empty string.** message will be returned to the user.
+   - If the *delete_password* property is not provided in the request body, or an empty string is used as its value, then the **The password of the thread is mandatory and it can\'t be an empty string.** message will be returned to the user.
 
 
 * *GET /api/threads/:board* returns a list of all the threads included in the specified board (it is specified as a request parameter). The information about the replies of each thread is minimal, displaying the *text* and *created_on* properties. After this endpoint is executed successfully, a response body like the following is returned:
@@ -134,8 +134,7 @@ a well-known social-media used by millions of users.
       }
     ]
    ```
-  The threads are sorted by the *bumped_on* property in descending order. This timestamp property is updated each time a new reply is added to the thread.
-  The replies displayed for each thread are sorted by the *created_on* property in descending order. Only the most recent three replies are displayed after running this request (a thread could contain more than three replies). If no threads exist in the database, then an empty array will be returned.
+  The threads are sorted by the *bumped_on* property in descending order. This timestamp property is updated each time a new reply is added to the thread. The replies displayed for each thread are sorted by the *created_on* property in descending order. Only the most recent three replies are displayed after running this request (a thread could contain more than three replies). If no threads exist in the database, then an empty array will be returned.
 
   There is only one error case for this particular request. If the user provides as a request parameter a name of a board that doesn't exist in the database, a message like **The board 'board500' doesn't exist.** will be returned to the user (assuming that 'board500' was used as a request param).
 
@@ -181,18 +180,18 @@ a well-known social-media used by millions of users.
 
   The replies displayed for each thread are sorted by the *created_on* property in descending order.
 
-  ### Error Cases
+  ###### Error Cases
 
-  The first error case is if the user provides a name for a board that does not exist in the database. In this case, the message **The board "board3" doesn't exist.** will be returned to the user ("board3" is just an example).
+   - The first error case is if the user provides a name for a board that does not exist in the database. In this case, the message **The board "board3" doesn't exist.** will be returned to the user ("board3" is just an example).
 
-  The next error case is when the user doesn't provide a *thread_id* as a request param, or he provides it as an empty string. In that case, the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
+   - The next error case is when the user doesn't provide a *thread_id* as a request param, or he provides it as an empty string. In that case, the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
 
-  If the user provides an invalid *thread_id* value, the message **The provided thread id is invalid.** is returned to the user.
+   - If the user provides an invalid *thread_id* value, the message **The provided thread id is invalid.** is returned to the user.
 
-  If the user provides a *thread_id* that doesn't belong to any thread from the database, then a message like
+   - If the user provides a *thread_id* that doesn't belong to any thread from the database, then a message like
   **A thread with an id of "5c7542eb06fd1e2a5a646d09" doesn't exist.** will be returned to the user (the id displayed in the message is an example).
 
-  The final error that can occur for this endpoint would be when the retrieved thread from the database doesn't have a *boardName* property equal to the provided board name as a request parameter. If this is the case, then a message like **The given thread does not belong to the "board10" board.** will be returned to the user.
+   - The final error that can occur for this endpoint would be when the retrieved thread from the database doesn't have a *boardName* property equal to the provided board name as a request parameter. If this is the case, then a message like **The given thread does not belong to the "board10" board.** will be returned to the user.
 
 * *DELETE /api/threads/:board* will delete a specific thread and all its related replies from the database. If the request is successful, the message **success** will be returned. The following is an example of a request body that is needed to successfully make the call to the endpoint:
 
@@ -203,22 +202,22 @@ a well-known social-media used by millions of users.
     }
    ```
 
-  ### Error cases
+  ###### Error cases
 
-  The first error case is if the user provides a name for a board that does not exist in the database. In this case, the message **The board "board3" doesn't exist.** will be returned to the user ("board3" is just an example).
+   - The first error case is if the user provides a name for a board that does not exist in the database. In this case, the message **The board "board3" doesn't exist.** will be returned to the user ("board3" is just an example).
 
-  The next error case is when the user doesn't provide a *thread_id* as a request param, or he provides it as an empty string. In that case, the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
+   - The next error case is when the user doesn't provide a *thread_id* as a request param, or he provides it as an empty string. In that case, the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
 
-  If the user provides an invalid *thread_id* value, the message **The provided thread id is invalid.** is returned to the user.
+   - If the user provides an invalid *thread_id* value, the message **The provided thread id is invalid.** is returned to the user.
 
-  If the user provides a *thread_id* that doesn't belong to any thread from the database, then a message like
+   - If the user provides a *thread_id* that doesn't belong to any thread from the database, then a message like
   **A thread with an id of "5c7542eb06fd1e2a5a646d09" doesn't exist.** will be returned to the user (the id displayed in the message is an example).
 
-  If the retrieved thread from the database doesn't have a *boardName* property equal to the provided board name as a request parameter, then a message like **The given thread does not belong to the "board10" board.** will be returned to the user.
+   - If the retrieved thread from the database doesn't have a *boardName* property equal to the provided board name as a request parameter, then a message like **The given thread does not belong to the "board10" board.** will be returned to the user.
 
-  If the user doesn't provide the *delete_password* property, or if the value of the property is an empty string, then the message **The password property is mandatory and it can\'t be an empty string.** will be returned to the user.
+   - If the user doesn't provide the *delete_password* property, or if the value of the property is an empty string, then the message **The password property is mandatory and it can\'t be an empty string.** will be returned to the user.
   
-  The last error that can occur is if the user provided thread password doesn't match the one from the database. If this is the case, the message **incorrect password** will be returned to the user.
+   - The last error that can occur is if the user provided thread password doesn't match the one from the database. If this is the case, the message **incorrect password** will be returned to the user.
 
   
 * *DELETE /api/replies/:board* will "delete" a reply from a thread. When I say delete in this case, I mean that the text of the reply will be replaced with "[deleted]". The message *success* is returned to the user if the request doesn't encounter any errors. The reply will still be present in the database. The following is an example of a request body that is needed to successfully make the call to the endpoint:
@@ -230,25 +229,25 @@ a well-known social-media used by millions of users.
       "delete_password": "password2"
     }
    ```
-   You need to specify the *thread_id* property, in order to know in what thread the reply is contained in. Then we have the *reply_id* property, in order to decide which of the thread's replies we want to delete. And finally we have the *delete_password* property, which, if it is the correct one, enables the user to remove the reply from the database.
+   You need to specify the *thread_id* property, in order to know in what thread the reply is contained in. Then we have the *reply_id* property, in order to decide which of the thread's replies we want to delete. And finally we have the *delete_password* property, which, if it is the correct one,enables the user to remove the reply from the database.
 
-   ### Error Cases
+   ###### Error Cases
 
-   The first error case is if the user provides a name for a board that does not exist in the database. In this case, the message **The board "board3" doesn't exist.** will be returned to the user ("board3" is just an example).
+    - The first error case is if the user provides a name for a board that does not exist in the database. In this case, the message **The board "board3" doesn't exist.** will be returned to the user ("board3" is just an example).
 
-   The next error case is when the user doesn't provide a *thread_id* as a request param, or he provides it as an empty string. In that case, the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
+    - The next error case is when the user doesn't provide a *thread_id* as a request param, or he provides it as an empty string. In that case, the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
 
-   If the user provides an invalid *thread_id* value, the message **The provided thread id is invalid.** is returned to the user.
+    - If the user provides an invalid *thread_id* value, the message **The provided thread id is invalid.** is returned to the user.
 
-   If the user provides a *thread_id* that doesn't belong to any thread from the database, then a message like **A thread with an id of "5c7542eb06fd1e2a5a646d09" doesn't exist.** will be returned to the user (the id displayed in the message is an example).
+    - If the user provides a *thread_id* that doesn't belong to any thread from the database, then a message like **A thread with an id of "5c7542eb06fd1e2a5a646d09" doesn't exist.** will be returned to the user (the id displayed in the message is an example).
 
-   If the retrieved thread from the database doesn't have a *boardName* property equal to the provided board name as a request parameter, then a message like **The given thread does not belong to the "board10" board.** will be returned to the user.
+    - If the retrieved thread from the database doesn't have a *boardName* property equal to the provided board name as a request parameter, then a message like **The given thread does not belong to the "board10" board.** will be returned to the user.
 
-   The next error is thrown if the user doesn't provide a *reply_id*, or the value that was provided is an empty string. In this case, the message **The "reply_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
+    - The next error is thrown if the user doesn't provide a *reply_id*, or the value that was provided is an empty string. In this case, the message **The "reply_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
 
-   Other errors that concern the *reply_id* property is when the value provided for it is invalid, or it doesn't belong to any reply from the database. In those cases messages like **The provided reply id is invalid.** and **A reply with an id of "5c714e592b2bd63544d4896d" doesn't exist.** respectively will be returned to the user.
+    - Other errors that concern the *reply_id* property is when the value provided for it is invalid, or it doesn't belong to any reply from the database. In those cases messages like **The provided reply id is invalid.** and **A reply with an id of "5c714e592b2bd63544d4896d" doesn't exist.** respectively will be returned to the user.
 
-   The final errors regarding the *DELETE /api/replies/:board* endpoint target the *delete_password* property. The first error regarding this property is thrown when the user doesn't provide a value for that property, or just sends an empty string for it. In this case, the message **The password property is mandatory and it can\'t be an empty string.** will be returned to the user.
+    - The final errors regarding the *DELETE /api/replies/:board* endpoint target the *delete_password* property. The first error regarding this property is thrown when the user doesn't provide a value for that property, or just sends an empty string for it. In this case, the message **The password property is mandatory and it can\'t be an empty string.** will be returned to the user.
    In the last case, when the input and database passwords don't match, the message **incorrect password** is returned.
 
 * *PUT /api/threads/:board* will mark a thread as reported. This means that the *reported* property will be set to true. This is the only value that is being changed after the request is finished. The following is an example of a request body that is needed to successfully make the call to the endpoint:
@@ -260,17 +259,17 @@ a well-known social-media used by millions of users.
    ```
    After the validation process, the specific thread will be taken from the database. The *reported* property will be set to "true". After that, the new thread will be saved in the database. If everything goes well, the message **success** will be sent back to the user.
 
-   ### Error Cases
+   ###### Error Cases
 
-   The first error case is if the user provides a name for a board that does not exist in the database. In this case, the message **The board "board3" doesn't exist.** will be returned to the user ("board3" is just an example).
+    - The first error case is if the user provides a name for a board that does not exist in the database. In this case, the message **The board "board3" doesn't exist.** will be returned to the user ("board3" is just an example).
 
-   The next error case is when the user doesn't provide a *thread_id* as a request param, or he provides it as an empty string. In that case, the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
+    - The next error case is when the user doesn't provide a *thread_id* as a request param, or he provides it as an empty string. In that case, the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
 
-   If the user provides an invalid *thread_id* value, the message **The provided thread id is invalid.** is returned to the user.
+    - If the user provides an invalid *thread_id* value, the message **The provided thread id is invalid.** is returned to the user.
 
-   If the user provides a *thread_id* that doesn't belong to any thread from the database, then a message like **A thread with an id of "5c7542eb06fd1e2a5a646d09" doesn't exist.** will be returned to the user (the id displayed in the message is an example).
+    - If the user provides a *thread_id* that doesn't belong to any thread from the database, then a message like **A thread with an id of "5c7542eb06fd1e2a5a646d09" doesn't exist.** will be returned to the user (the id displayed in the message is an example).
 
-   If the retrieved thread from the database doesn't have a *boardName* property equal to the provided board name as a request parameter, then a message like **The given thread does not belong to the "board10" board.** will be returned to the user.
+    - If the retrieved thread from the database doesn't have a *boardName* property equal to the provided board name as a request parameter, then a message like **The given thread does not belong to the "board10" board.** will be returned to the user.
 
 
 * *PUT /api/replies/:board* will mark a reply as reported. This means that the *reported* property will be set to true. This is the only value that is being changed after the request is finished. The following is an example of a request body that is needed to successfully make the call to the endpoint:
@@ -284,21 +283,21 @@ a well-known social-media used by millions of users.
 
    After the validation process, the specific thread will be taken from the database using the *thread_id* property. Then, the program will iterate through the array of replies from that thread, and find the specific reply, using the *reply_id* property. If it is found, its *reported* property will be set to "true". The thread will be saved in the database along with the modification made to the reply. If everything goes well, the message **success** will be sent back to the user.
 
-   ### Error Cases
+   ###### Error Cases
 
-   The first error case is if the user provides a name for a board that does not exist in the database. In this case, the message **The board "board3" doesn't exist.** will be returned to the user ("board3" is just an example).
+    - The first error case is if the user provides a name for a board that does not exist in the database. In this case, the message **The board "board3" doesn't exist.** will be returned to the user ("board3" is just an example).
 
-   The next error case is when the user doesn't provide a *thread_id* as a request param, or he provides it as an empty string. In that case, the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
+    - The next error case is when the user doesn't provide a *thread_id* as a request param, or he provides it as an empty string. In that case, the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
 
-   If the user provides an invalid *thread_id* value, the message **The provided thread id is invalid.** is returned to the user.
+    - If the user provides an invalid *thread_id* value, the message **The provided thread id is invalid.** is returned to the user.
 
-   If the user provides a *thread_id* that doesn't belong to any thread from the database, then a message like **A thread with an id of "5c7542eb06fd1e2a5a646d09" doesn't exist.** will be returned to the user (the id displayed in the message is an example).
+    - If the user provides a *thread_id* that doesn't belong to any thread from the database, then a message like **A thread with an id of "5c7542eb06fd1e2a5a646d09" doesn't exist.** will be returned to the user (the id displayed in the message is an example).
 
-   If the retrieved thread from the database doesn't have a *boardName* property equal to the provided board name as a request parameter, then a message like **The given thread does not belong to the "board10" board.** will be returned to the user.
+    - If the retrieved thread from the database doesn't have a *boardName* property equal to the provided board name as a request parameter, then a message like **The given thread does not belong to the "board10" board.** will be returned to the user.
 
-   The next error is thrown if the user doesn't provide a *reply_id*, or the value that was provided is an empty string. In this case, the message **The "reply_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
+    - The next error is thrown if the user doesn't provide a *reply_id*, or the value that was provided is an empty string. In this case, the message **The "reply_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
 
-   Other errors that concern the *reply_id* property is when the value provided for it is invalid, or it doesn't belong to any reply from the database. In those cases messages like **The provided reply id is invalid.** and **A reply with an id of "5c714e592b2bd63544d4896d" doesn't exist.** respectively will be returned to the user.
+    - Other errors that concern the *reply_id* property is when the value provided for it is invalid, or it doesn't belong to any reply from the database. In those cases messages like **The provided reply id is invalid.** and **A reply with an id of "5c714e592b2bd63544d4896d" doesn't exist.** respectively will be returned to the user.
 
 
 ## Getting Started
