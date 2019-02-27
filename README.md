@@ -246,21 +246,43 @@ a well-known social-media used by millions of users.
 
    The next error is thrown if the user doesn't provide a *reply_id*, or the value that was provided is an empty string. In this case, the message **The "reply_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
 
-   Other errors that concern the *reply_id* property is when the value provided for it is invalid, or it doesn't belong to any reply from the database. In those cases the messages **The provided reply id is invalid.** and **A reply with an id of "5c714e592b2bd63544d4896d" doesn't exist.** respectively will be returned to the user.
+   Other errors that concern the *reply_id* property is when the value provided for it is invalid, or it doesn't belong to any reply from the database. In those cases messages like **The provided reply id is invalid.** and **A reply with an id of "5c714e592b2bd63544d4896d" doesn't exist.** respectively will be returned to the user.
 
    The final errors regarding the *DELETE /api/replies/:board* endpoint target the *delete_password* property. The first error regarding this property is thrown when the user doesn't provide a value for that property, or just sends an empty string for it. In this case, the message **The password property is mandatory and it can\'t be an empty string.** will be returned to the user.
    In the last case, when the input and database passwords don't match, the message **incorrect password** is returned.
 
-* *PUT /api/threads/:board* will "delete" a reply from a thread. When I say delete in this case, I mean that the text of the reply will be replaced with "[deleted]". The message *success* is returned to the user if the request doesn't encounter any errors. The reply will still be present in the database. The following is an example of a request body that is needed to successfully make the call to the endpoint:
+* *PUT /api/threads/:board* will mark a thread as reported. This means that the *reported* property will be set to true. This is the only value that is being changed after the request is finished. The following is an example of a request body that is needed to successfully make the call to the endpoint:
+
+   ```
+    {
+      "thread_id": "5c755498d78e600c6ecf5472"
+    }
+   ```
+   After the validation process, the specific thread will be taken from the database. The *reported* property will be set to "true". After that, the new thread will be saved in the database. If everything goes well, the message **success** will be sent back to the user.
+
+   ### Error Cases
+
+   The first error case is if the user provides a name for a board that does not exist in the database. In this case, the message **The board "board3" doesn't exist.** will be returned to the user ("board3" is just an example).
+
+   The next error case is when the user doesn't provide a *thread_id* as a request param, or he provides it as an empty string. In that case, the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
+
+   If the user provides an invalid *thread_id* value, the message **The provided thread id is invalid.** is returned to the user.
+
+   If the user provides a *thread_id* that doesn't belong to any thread from the database, then a message like **A thread with an id of "5c7542eb06fd1e2a5a646d09" doesn't exist.** will be returned to the user (the id displayed in the message is an example).
+
+   If the retrieved thread from the database doesn't have a *boardName* property equal to the provided board name as a request parameter, then a message like **The given thread does not belong to the "board10" board.** will be returned to the user.
+
+
+* *PUT /api/replies/:board* will mark a reply as reported. This means that the *reported* property will be set to true. This is the only value that is being changed after the request is finished. The following is an example of a request body that is needed to successfully make the call to the endpoint:
 
    ```
     {
       "thread_id": "5c755498d78e600c6ecf5472",
-      "reply_id": "5c714e592b2bd63544d4896d",
-      "delete_password": "password2"
+      "reply_id": "5c714e592b2bd63544d4896d"
     }
    ```
-   You need to specify the *thread_id* property, in order to know in what thread the reply is contained in. Then we have the *reply_id* property, in order to decide which of the thread's replies we want to delete. And finally we have the *delete_password* property, which, if it is the correct one, enables the user to remove the reply from the database.
+
+   After the validation process, the specific thread will be taken from the database using the *thread_id* property. Then, the program will iterate through the array of replies from that thread, and find the specific reply, using the *reply_id* property. If it is found, its *reported* property will be set to "true". The thread will be saved in the database along with the modification made to the reply. If everything goes well, the message **success** will be sent back to the user.
 
    ### Error Cases
 
@@ -276,41 +298,7 @@ a well-known social-media used by millions of users.
 
    The next error is thrown if the user doesn't provide a *reply_id*, or the value that was provided is an empty string. In this case, the message **The "reply_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
 
-   Other errors that concern the *reply_id* property is when the value provided for it is invalid, or it doesn't belong to any reply from the database. In those cases the messages **The provided reply id is invalid.** and **A reply with an id of "5c714e592b2bd63544d4896d" doesn't exist.** respectively will be returned to the user.
-
-   The final errors regarding the *DELETE /api/replies/:board* endpoint target the *delete_password* property. The first error regarding this property is thrown when the user doesn't provide a value for that property, or just sends an empty string for it. In this case, the message **The password property is mandatory and it can\'t be an empty string.** will be returned to the user.
-   In the last case, when the input and database passwords don't match, the message **incorrect password** is returned.
-
-
-* *PUT /api/replies/:board* will "delete" a reply from a thread. When I say delete in this case, I mean that the text of the reply will be replaced with "[deleted]". The message *success* is returned to the user if the request doesn't encounter any errors. The reply will still be present in the database. The following is an example of a request body that is needed to successfully make the call to the endpoint:
-
-   ```
-    {
-      "thread_id": "5c755498d78e600c6ecf5472",
-      "reply_id": "5c714e592b2bd63544d4896d",
-      "delete_password": "password2"
-    }
-   ```
-   You need to specify the *thread_id* property, in order to know in what thread the reply is contained in. Then we have the *reply_id* property, in order to decide which of the thread's replies we want to delete. And finally we have the *delete_password* property, which, if it is the correct one, enables the user to remove the reply from the database.
-
-   ### Error Cases
-
-   The first error case is if the user provides a name for a board that does not exist in the database. In this case, the message **The board "board3" doesn't exist.** will be returned to the user ("board3" is just an example).
-
-   The next error case is when the user doesn't provide a *thread_id* as a request param, or he provides it as an empty string. In that case, the message **The "thread_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
-
-   If the user provides an invalid *thread_id* value, the message **The provided thread id is invalid.** is returned to the user.
-
-   If the user provides a *thread_id* that doesn't belong to any thread from the database, then a message like **A thread with an id of "5c7542eb06fd1e2a5a646d09" doesn't exist.** will be returned to the user (the id displayed in the message is an example).
-
-   If the retrieved thread from the database doesn't have a *boardName* property equal to the provided board name as a request parameter, then a message like **The given thread does not belong to the "board10" board.** will be returned to the user.
-
-   The next error is thrown if the user doesn't provide a *reply_id*, or the value that was provided is an empty string. In this case, the message **The "reply_id" field is mandatory and it can\'t be an empty string.** will be returned to the user.
-
-   Other errors that concern the *reply_id* property is when the value provided for it is invalid, or it doesn't belong to any reply from the database. In those cases the messages **The provided reply id is invalid.** and **A reply with an id of "5c714e592b2bd63544d4896d" doesn't exist.** respectively will be returned to the user.
-
-   The final errors regarding the *DELETE /api/replies/:board* endpoint target the *delete_password* property. The first error regarding this property is thrown when the user doesn't provide a value for that property, or just sends an empty string for it. In this case, the message **The password property is mandatory and it can\'t be an empty string.** will be returned to the user.
-   In the last case, when the input and database passwords don't match, the message **incorrect password** is returned.
+   Other errors that concern the *reply_id* property is when the value provided for it is invalid, or it doesn't belong to any reply from the database. In those cases messages like **The provided reply id is invalid.** and **A reply with an id of "5c714e592b2bd63544d4896d" doesn't exist.** respectively will be returned to the user.
 
 
 ## Getting Started
