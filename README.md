@@ -307,7 +307,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You need to have ***git***, ***yarn***, ***nodejs*** and ***mongodb*** installed on your computer.
+You need to have ***git***, ***npm***, ***nodejs*** and ***mongodb*** installed on your computer.
 
 ### Installation steps
 
