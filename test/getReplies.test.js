@@ -4,7 +4,10 @@ const moment = require('moment-timezone');
 const _ = require('lodash');
 const { ObjectID } = require('mongodb');
 const { app } = require('../server');
-const { threads } = require('./database/populateDatabase');
+const { populateBoardCollection, populateThreadCollection, threads } = require('./database/populateDatabase');
+
+beforeEach(populateBoardCollection);
+beforeEach(populateThreadCollection);
 
 describe('GET /api/replies/:board', () => {
   it('should successfully return the details of a specific thread and all of its replies', (done) => {
